@@ -1,0 +1,33 @@
+const audio = document.getElementById("audio");
+const lyrics = document.querySelectorAll("#lyrics p");
+const loi1 = document.getElementById("loibaihat");
+const loi2 = document.getElementById("loibaihat2");
+
+audio.addEventListener("timeupdate", function () {
+  var currentTime = audio.currentTime;
+  if (currentTime >= 245) audio.currentTime = 0;
+  for (var i = 0; i < lyrics.length; i++) {
+    var lyricTime = parseFloat(lyrics[i].getAttribute("data-time"));
+    var nextLyricTime =
+      i < lyrics.length - 1
+        ? parseFloat(lyrics[i + 1].getAttribute("data-time"))
+        : Infinity;
+
+    if (currentTime >= lyricTime && currentTime < nextLyricTime) {
+      loi1.textContent = lyrics[i].textContent;
+      loi2.textContent = lyrics[i + 1].textContent;
+    }
+  }
+});
+const audioBtn = document.getElementById("phatnhac");
+audioBtn.addEventListener("click", function () {
+  if (audio.isRunning) {
+    audio.isRunning = false;
+    audio.pause();
+    audioBtn.textContent = "▶";
+  } else {
+    audio.isRunning = true;
+    audio.play();
+    audioBtn.textContent = "⏸";
+  }
+});
